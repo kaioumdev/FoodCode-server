@@ -27,7 +27,12 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     await client.connect();
-    await client.db("admin").command({ ping: 1 });
+    const menuCollection = client.db("bistroDB").collection("menu");
+
+    app.get("/menu", async(req, res) => {
+        const result = await menuCollection.find().toArray();
+        res.send(result);
+    })
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
   } finally {
     // Ensures that the client will close when you finish/error
