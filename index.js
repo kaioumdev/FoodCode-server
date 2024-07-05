@@ -42,18 +42,22 @@ async function run() {
 
     // middlewares
     const verifyToken = (req, res, next) => {
-      console.log(req.headers);
+      console.log('Inside verify token',req.headers.Authorization);
       if(!req.headers.Authorization){
         return res.status(401).send({message: "forbidden access token"})
       }
       const token = req.headers.Authorization.split(' ')[1];
-      if(token){
-        
-      }
+      jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
+        if (err) {
+          return res.status(403).send({message: "forbidden access token"})
+        }
+        req.decoded = decoded;
+        next();
+      })
     }
 
     //user related api
-    app.get("/users", async (req, res) => {
+    app.get("/users", verifyToken, async (req, res) => {
       console.log(req.headers)
       const result = await userCollection.find().toArray();
       res.send(result);
