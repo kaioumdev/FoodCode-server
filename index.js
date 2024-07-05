@@ -50,17 +50,23 @@ async function run() {
       res.send(result);
     })
 
-    app.patch("/users/admin/:id", async(req, res) => {
-      const id = req.params.id;
-      const filter = {id: new ObjectId(id)};
-      const updatedDoc = {
-        $set: {
-          roll: 'admin',
-        }
+    app.patch("/users/admin/:id", async (req, res) => {
+      try {
+        const id = req.params.id;
+        const filter = { _id: new ObjectId(id) }; // Assuming the ID is stored as an ObjectId in the database
+        const updatedDoc = {
+          $set: {
+            role: 'admin',
+          },
+        };
+        const result = await userCollection.updateOne(filter, updatedDoc);
+        console.log(result);
+        res.send(result);
+      } catch (error) {
+        console.error("Error updating user role:", error);
+        res.status(500).send({ message: "An error occurred" });
       }
-      const result = await userCollection.updateOne(filter, updatedDoc);
-      res.send(result);
-    })
+    });
 
     app.delete("/users/:id", async(req, res) => {
       id = req.params.id;
