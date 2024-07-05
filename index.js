@@ -40,6 +40,18 @@ async function run() {
       res.send({token})
     })
 
+    // middlewares
+    const verifyToken = (req, res, next) => {
+      console.log(req.headers);
+      if(!req.headers.Authorization){
+        return res.status(401).send({message: "forbidden access token"})
+      }
+      const token = req.headers.Authorization.split(' ')[1];
+      if(token){
+        
+      }
+    }
+
     //user related api
     app.get("/users", async (req, res) => {
       console.log(req.headers)
