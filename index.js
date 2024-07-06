@@ -42,23 +42,24 @@ async function run() {
 
     // middlewares
     const verifyToken = (req, res, next) => {
-      console.log('Inside verify token',req.headers.Authorization);
-      if(!req.headers.Authorization){
-        return res.status(401).send({message: "forbidden access token"})
+      console.log(req.headers.authorization);
+      if(!req.headers.authorization){
+        res.status(401).send({message: "Unauthorized Access token"})
+        return;
       }
-      const token = req.headers.Authorization.split(' ')[1];
-      jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
-        if (err) {
-          return res.status(403).send({message: "forbidden access token"})
+      const token = req.headers.authorization.split(" ")[1];
+      jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (error, decoded) => {
+        if(error){
+          req.status(401).send({message: "Forbidden Access token"})
         }
-        req.decoded = decoded;
-        next();
+        req.user = decoded;
+        next()
       })
     }
 
     //user related api
     app.get("/users", verifyToken, async (req, res) => {
-      console.log(req.headers)
+      console.log('Inside verify token',req.headers)
       const result = await userCollection.find().toArray();
       res.send(result);
     })
@@ -94,7 +95,7 @@ async function run() {
     });
 
     app.delete("/users/:id", async(req, res) => {
-      id = req.params.id;
+      const id = req.params.id;
       const query = {_id: new ObjectId(id)};
       const result = await userCollection.deleteOne(query);
       res.send(result);
