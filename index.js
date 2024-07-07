@@ -206,6 +206,12 @@ async function run() {
       });
     };
 
+    app.get("/users", verifyToken, async (req, res) => {
+      console.log('Inside verify token', req.headers);
+      const result = await userCollection.find().toArray();
+      res.send(result);
+    });
+
     app.get("/users/admin/:email", async(req, res) => {
       const email = req.params.email;
      if(email !== req.decoded.email){
@@ -219,12 +225,6 @@ async function run() {
      };
      res.send(admin);
     })
-
-    app.get("/users", verifyToken, async (req, res) => {
-      console.log('Inside verify token', req.headers);
-      const result = await userCollection.find().toArray();
-      res.send(result);
-    });
 
     app.post("/users", async (req, res) => {
       const user = req.body;
@@ -273,7 +273,7 @@ async function run() {
       res.send(result);
     });
 
-    app.get("/carts", verifyToken, async (req, res) => {
+    app.get("/carts", async (req, res) => {
       const email = req.query.email;
       const query = { email: email };
       const result = await cartCollection.find(query).toArray();
