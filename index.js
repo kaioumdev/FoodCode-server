@@ -206,7 +206,19 @@ async function run() {
       });
     };
 
-    app.get("/users", verifyToken, async (req, res) => {
+    //use verify admin after verify token
+    const verifyAdmin = async(req, res, next) => {
+      const email = req.decoded.email;
+      const query = {email: email};
+      const user = await userCollection.findOne(query);
+      const isAdmin = user?.role === 'admin';
+      if(!isAdmin){
+        return res.status(403).send({message: 'Forbidden accesss & user not admin'});
+      }
+      next();
+    }
+
+    app.get("/users", verifyToken, verifyAdmin, async (req, res) => {
       console.log('Inside verify token', req.headers);
       const result = await userCollection.find().toArray();
       res.send(result);
@@ -215,7 +227,7 @@ async function run() {
     app.get("/users/admin/:email", verifyToken, async(req, res) => {
       const email = req.params.email;
      if(email !== req.decoded.email){
-      return res.status(403).send({message: 'Unauthorized accesss'})
+      return res.status(403).send({message: 'Forbidden accesss'})
      };
      const query = {email: email};
      const user = await userCollection.findOne(query);
@@ -238,7 +250,7 @@ async function run() {
       res.send(result);
     });
 
-    app.patch("/users/admin/:id", async (req, res) => {
+    app.patch("/users/admin/:id", verifyToken, verifyAdmin, async (req, res) => {
       try {
         const id = req.params.id;
         const filter = { _id: new ObjectId(id) };
@@ -256,7 +268,7 @@ async function run() {
       }
     });
 
-    app.delete("/users/:id", async (req, res) => {
+    app.delete("/users/:id", verifyToken, verifyAdmin, async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await userCollection.deleteOne(query);
