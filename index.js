@@ -212,7 +212,7 @@ async function run() {
       res.send(result);
     });
 
-    app.get("/users/admin/:email", async(req, res) => {
+    app.get("/users/admin/:email", verifyToken, async(req, res) => {
       const email = req.params.email;
      if(email !== req.decoded.email){
       return res.status(403).send({message: 'Unauthorized accesss'})
@@ -223,7 +223,7 @@ async function run() {
      if(user){
       admin = user?.role === 'admin'
      };
-     res.send(admin);
+     res.send({admin: admin});
     })
 
     app.post("/users", async (req, res) => {
