@@ -30,6 +30,7 @@ async function run() {
     const menuCollection = client.db("bistroDB").collection("menu");
     const reviewCollection = client.db("bistroDB").collection("reviews");
     const cartCollection = client.db("bistroDB").collection("carts");
+    const paymentCollection = client.db("bistroDB").collection("payments");
 
     app.post("/jwt", async (req, res) => {
       const user = req.body;
@@ -206,6 +207,15 @@ async function run() {
       res.send({
         clientSecret: paymentIntent.client_secret,
       });
+    })
+
+    app.post("/payments", async (req, res) => {
+      const payment = req.body;
+      const paymentResult = await paymentCollection.insertOne(payment)
+
+      //carefully delete each item from the cart
+      console.log('payment info', payment)
+      res.send(paymentResult)
     })
 
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
