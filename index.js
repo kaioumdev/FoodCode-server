@@ -214,8 +214,12 @@ async function run() {
       const paymentResult = await paymentCollection.insertOne(payment)
 
       //carefully delete each item from the cart
-      console.log('payment info', payment)
-      res.send(paymentResult)
+      console.log('payment info', payment);
+      const query = {_id: {
+        $in: payment.cartIds.map(id => new ObjectId(id))
+      }}
+      const deleteResult = await cartCollection.deleteMany(query)
+      res.send({paymentResult, deleteResult});
     })
 
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
