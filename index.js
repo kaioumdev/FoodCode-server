@@ -238,7 +238,11 @@ async function run() {
       const menuItems = await menuCollection.estimatedDocumentCount();
       const orders = await paymentCollection.estimatedDocumentCount();
 
-      res.send({ users, menuItems, orders });
+      //this is not the best way
+      const payments = await paymentCollection.find().toArray();
+      const revenue = payments.reduce((total, payment) => total + payment.price, 0);
+
+      res.send({ users, menuItems, orders, revenue });
     })
 
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
