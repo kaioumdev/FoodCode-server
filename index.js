@@ -232,6 +232,15 @@ async function run() {
       res.send({paymentResult, deleteResult});
     })
 
+    //dashboard related api
+    app.get("/admin-stats", async (req, res) => {
+      const users = await userCollection.estimatedDocumentCount();
+      const menuItems = await menuCollection.estimatedDocumentCount();
+      const orders = await paymentCollection.estimatedDocumentCount();
+
+      res.send({ users, menuItems, orders });
+    })
+
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
   } finally {
     // await client.close();
