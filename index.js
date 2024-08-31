@@ -65,7 +65,7 @@ async function run() {
       next();
     }
 
-    app.get("/users", verifyToken, verifyAdmin, async (req, res) => {
+    app.get("/users", verifyToken, async (req, res) => {
       // console.log('Inside verify token', req.headers);
       const result = await userCollection.find().toArray();
       res.send(result);
@@ -74,7 +74,7 @@ async function run() {
     app.get("/users/admin/:email", verifyToken, async(req, res) => {
       const email = req.params.email;
      if(email !== req.decoded.email){
-      return res.status(403).send({message: 'Forbidden accesss'})
+      return res?.status(403)?.send({message: 'Forbidden accesss'})
      };
      const query = {email: email};
      const user = await userCollection.findOne(query);
