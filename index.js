@@ -259,6 +259,14 @@ async function run() {
       res.send({ users, menuItems, orders, revenue });
     })
 
+    //using aggregate pipeline
+    app.get("/order-stats", async(req, res) => {
+      const result = await paymentCollection.aggregate([
+
+      ]).toArray();
+      res.send(result);
+    })
+
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
   } finally {
     // await client.close();
