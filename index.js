@@ -264,7 +264,25 @@ async function run() {
       const result = await paymentCollection.aggregate([
         {
           $unwind: '$menuItemIds'
-        }
+        },
+        {
+          $lookup: {
+            from: 'menu',
+            localField: 'menuItemIds',
+            foreignField: '_id',
+            as: 'menuItem'
+          }
+        },
+        // {
+        //   $unwind: "$menuItemIds"
+        // },
+        // {
+        //   $group: {
+        //     _id: "$menuItemIds.category",
+        //     quantity: {$sum: 1},
+        //     // revenue: {$sum: $menuItemIds.price}
+        //   }
+        // }
       ]).toArray();
       res.send(result);
     })
