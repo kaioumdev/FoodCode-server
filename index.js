@@ -270,17 +270,17 @@ async function run() {
             from: 'menu',
             localField: 'menuItemIds',
             foreignField: '_id',
-            as: 'menuItem'
+            as: 'menuItems'
           }
         },
         // {
-        //   $unwind: "$menuItemIds"
+        //   $unwind: '$menuItems'
         // },
         // {
         //   $group: {
-        //     _id: "$menuItemIds.category",
+        //     _id: '$menuItems.category',
         //     quantity: {$sum: 1},
-        //     // revenue: {$sum: $menuItemIds.price}
+        //     revenue: {$sum: '$menuItems.price'}
         //   }
         // }
       ]).toArray();
