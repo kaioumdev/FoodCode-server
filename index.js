@@ -1,11 +1,11 @@
-const express = require('express');
+const express = require("express");
 const app = express();
-const cors = require('cors');
-const jwt = require('jsonwebtoken');
-require('dotenv').config();
-const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
+const cors = require("cors");
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const port = process.env.PORT || 5001;
-const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY)
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 const name = process.env.DB_NAME;
 const password = process.env.DB_PASS;
@@ -20,7 +20,7 @@ const client = new MongoClient(uri, {
     version: ServerApiVersion.v1,
     strict: true,
     deprecationErrors: true,
-  }
+  },
 });
 
 async function run() {
@@ -34,7 +34,9 @@ async function run() {
 
     app.post("/jwt", async (req, res) => {
       const user = req.body;
-      const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' });
+      const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
+        expiresIn: "1h",
+      });
       res.send({ token });
     });
 
@@ -54,16 +56,18 @@ async function run() {
     };
 
     //use verify admin after verify token
-    const verifyAdmin = async(req, res, next) => {
+    const verifyAdmin = async (req, res, next) => {
       const email = req.decoded.email;
-      const query = {email: email};
+      const query = { email: email };
       const user = await userCollection.findOne(query);
-      const isAdmin = user?.role === 'admin';
-      if(!isAdmin){
-        return res.status(403).send({message: 'Forbidden accesss & user not admin'});
+      const isAdmin = user?.role === "admin";
+      if (!isAdmin) {
+        return res
+          .status(403)
+          .send({ message: "Forbidden accesss & user not admin" });
       }
       next();
-    }
+    };
 
     app.get("/users", verifyToken, async (req, res) => {
       // console.log('Inside verify token', req.headers);
@@ -71,19 +75,19 @@ async function run() {
       res.send(result);
     });
 
-    app.get("/users/admin/:email", verifyToken, async(req, res) => {
+    app.get("/users/admin/:email", verifyToken, async (req, res) => {
       const email = req.params.email;
-     if(email !== req.decoded.email){
-      return res?.status(403)?.send({message: 'Forbidden accesss'})
-     };
-     const query = {email: email};
-     const user = await userCollection.findOne(query);
-     let admin = false;
-     if(user){
-      admin = user?.role === 'admin'
-     };
-     res.send({admin: admin});
-    })
+      if (email !== req.decoded.email) {
+        return res?.status(403)?.send({ message: "Forbidden accesss" });
+      }
+      const query = { email: email };
+      const user = await userCollection.findOne(query);
+      let admin = false;
+      if (user) {
+        admin = user?.role === "admin";
+      }
+      res.send({ admin: admin });
+    });
 
     app.post("/users", async (req, res) => {
       const user = req.body;
@@ -97,23 +101,28 @@ async function run() {
       res.send(result);
     });
 
-    app.patch("/users/admin/:id", verifyToken, verifyAdmin, async (req, res) => {
-      try {
-        const id = req.params.id;
-        const filter = { _id: new ObjectId(id) };
-        const updatedDoc = {
-          $set: {
-            role: 'admin',
-          },
-        };
-        const result = await userCollection.updateOne(filter, updatedDoc);
-        console.log(result);
-        res.send(result);
-      } catch (error) {
-        console.error("Error updating user role:", error);
-        res.status(500).send({ message: "An error occurred" });
+    app.patch(
+      "/users/admin/:id",
+      verifyToken,
+      verifyAdmin,
+      async (req, res) => {
+        try {
+          const id = req.params.id;
+          const filter = { _id: new ObjectId(id) };
+          const updatedDoc = {
+            $set: {
+              role: "admin",
+            },
+          };
+          const result = await userCollection.updateOne(filter, updatedDoc);
+          console.log(result);
+          res.send(result);
+        } catch (error) {
+          console.error("Error updating user role:", error);
+          res.status(500).send({ message: "An error occurred" });
+        }
       }
-    });
+    );
 
     app.delete("/users/:id", verifyToken, verifyAdmin, async (req, res) => {
       const id = req.params.id;
@@ -131,23 +140,23 @@ async function run() {
     app.get("/menu/:id", async (req, res) => {
       const id = req.params.id;
       console.log(id);
-      const query = {_id: new ObjectId(id)};
+      const query = { _id: new ObjectId(id) };
       console.log(query);
       const result = await menuCollection.findOne(query);
       console.log(result);
       res.send(result);
-    })
+    });
 
     app.post("/menu", verifyToken, verifyAdmin, async (req, res) => {
       const menuItem = req.body;
       const result = await menuCollection.insertOne(menuItem);
       res.send(result);
-    })
+    });
 
     app.patch("/menu/:id", async (req, res) => {
       const item = req.body;
       const id = req.params.id;
-      const filter = {_id: new ObjectId(id)};
+      const filter = { _id: new ObjectId(id) };
       const updatedDoc = {
         $set: {
           name: item.name,
@@ -155,18 +164,19 @@ async function run() {
           price: item.price,
           recipe: item.recipe,
           image: item.image,
-        }
-      }
+        },
+      };
       const result = await menuCollection.updateOne(filter, updatedDoc);
       res.send(result);
-    })
+    });
 
+    //menu delete api call
     app.delete("/menu/:id", verifyToken, verifyAdmin, async (req, res) => {
       const id = req.params.id;
-      const query = {_id: new ObjectId(id)};
+      const query = { _id: new ObjectId(id) };
       const result = await menuCollection.deleteOne(query);
       res.send(result);
-    })
+    });
 
     app.get("/review", async (req, res) => {
       const result = await reviewCollection.find().toArray();
@@ -195,42 +205,44 @@ async function run() {
 
     //payment realded method
     app.post("/create-payment-intent", async (req, res) => {
-      const {price} = req.body;
+      const { price } = req.body;
       const amount = parseInt(price * 100);
-      console.log(`${amount} intent successfully created`)
+      console.log(`${amount} intent successfully created`);
       const paymentIntent = await stripe.paymentIntents.create({
         amount: amount,
-        currency: 'usd',
-        payment_method_types: ['card'],
-      })
+        currency: "usd",
+        payment_method_types: ["card"],
+      });
 
       res.send({
         clientSecret: paymentIntent.client_secret,
       });
-    })
+    });
 
     app.get("/payments/:email", verifyToken, async (req, res) => {
       const email = req.params.email;
       const query = { email: email };
-      if(req.params.email !== req.decoded.email){
-        return res.status(403).send({message: 'Forbidden accesss'})
+      if (req.params.email !== req.decoded.email) {
+        return res.status(403).send({ message: "Forbidden accesss" });
       }
       const result = await paymentCollection.find(query).toArray();
       res.send(result);
-    })
+    });
 
     app.post("/payments", async (req, res) => {
       const payment = req.body;
-      const paymentResult = await paymentCollection.insertOne(payment)
+      const paymentResult = await paymentCollection.insertOne(payment);
 
       //carefully delete each item from the cart
-      console.log('payment info', payment);
-      const query = {_id: {
-        $in: payment.cartIds.map(id => new ObjectId(id)),
-      }}
-      const deleteResult = await cartCollection.deleteMany(query)
-      res.send({paymentResult, deleteResult});
-    })
+      console.log("payment info", payment);
+      const query = {
+        _id: {
+          $in: payment.cartIds.map((id) => new ObjectId(id)),
+        },
+      };
+      const deleteResult = await cartCollection.deleteMany(query);
+      res.send({ paymentResult, deleteResult });
+    });
 
     //dashboard related api
     app.get("/admin-stats", verifyToken, verifyAdmin, async (req, res) => {
@@ -241,61 +253,67 @@ async function run() {
       //this is not the best way
       // const payments = await paymentCollection.find().toArray();
       // const revenue = payments.reduce((total, payment) => total + payment.price, 0);
-      
-      const result = await paymentCollection.aggregate([
-        {
-          $group: {
-            _id:null,
-            totalRevenue: {
-              $sum: "$price",
-            }
-          }
-        }
-      ]).toArray();
+
+      const result = await paymentCollection
+        .aggregate([
+          {
+            $group: {
+              _id: null,
+              totalRevenue: {
+                $sum: "$price",
+              },
+            },
+          },
+        ])
+        .toArray();
 
       const revenueResult = result.length > 0 ? result[0].totalRevenue : 0;
       const revenue = parseFloat(revenueResult.toFixed(2));
 
       res.send({ users, menuItems, orders, revenue });
-    })
+    });
 
     //using aggregate pipeline
-    app.get("/order-stats", async(req, res) => {
-      const result = await paymentCollection.aggregate([
-        {
-          $unwind: '$menuItemIds'
-        },
-        {
-          $lookup: {
-            from: 'menu',
-            localField: 'menuItemIds',
-            foreignField: '_id',
-            as: 'menuItems'
-          }
-        },
-        // {
-        //   $unwind: '$menuItems'
-        // },
-        // {
-        //   $group: {
-        //     _id: '$menuItems.category',
-        //     quantity: {$sum: 1},
-        //     revenue: {$sum: '$menuItems.price'}
-        //   }
-        // }
-      ]).toArray();
+    app.get("/order-stats", async (req, res) => {
+      const result = await paymentCollection
+        .aggregate([
+          {
+            $unwind: "$menuItemIds",
+          },
+          {
+            $lookup: {
+              from: "menu",
+              localField: "menuItemIds",
+              foreignField: "_id",
+              as: "menuItems",
+            },
+          },
+          // {
+          //   $unwind: '$menuItems'
+          // },
+          // {
+          //   $group: {
+          //     _id: '$menuItems.category',
+          //     quantity: {$sum: 1},
+          //     revenue: {$sum: '$menuItems.price'}
+          //   }
+          // }
+        ])
+        .toArray();
       res.send(result);
-    })
+    });
 
-    console.log("Pinged your deployment. You successfully connected to MongoDB!");
+    console.log(
+      "Pinged your deployment. You successfully connected to MongoDB!"
+    );
   } finally {
     // await client.close();
   }
 }
 run().catch(console.dir);
 
-app.get('/', (req, res) => {
-  res.send('Bistro World!');
+app.get("/", (req, res) => {
+  res.send("Bistro World!");
 });
 
 app.listen(port, () => {
