@@ -32,6 +32,7 @@ async function run() {
     const cartCollection = client.db("bistroDB").collection("carts");
     const paymentCollection = client.db("bistroDB").collection("payments");
 
+    //create jwt token
     app.post("/jwt", async (req, res) => {
       const user = req.body;
       const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
