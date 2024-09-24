@@ -137,13 +137,11 @@ async function run() {
       res.send(result);
     });
 
+    //get single menu item
     app.get("/menu/:id", async (req, res) => {
       const id = req.params.id;
-      console.log(id);
       const query = { _id: new ObjectId(id) };
-      console.log(query);
       const result = await menuCollection.findOne(query);
-      console.log(result);
       res.send(result);
     });
 
