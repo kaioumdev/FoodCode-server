@@ -102,6 +102,7 @@ async function run() {
       res.send(result);
     });
 
+    //make admin by patch method
     app.patch(
       "/users/admin/:id",
       verifyToken,
@@ -116,7 +117,6 @@ async function run() {
             },
           };
           const result = await userCollection.updateOne(filter, updatedDoc);
-          console.log(result);
           res.send(result);
         } catch (error) {
           console.error("Error updating user role:", error);
