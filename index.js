@@ -125,6 +125,7 @@ async function run() {
             }
         );
 
+        //delete user by delete method
         app.delete("/users/:id", verifyToken, verifyAdmin, async (req, res) => {
             const id = req.params.id;
             const query = { _id: new ObjectId(id) };
