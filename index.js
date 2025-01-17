@@ -71,7 +71,7 @@ async function run() {
         };
 
         app.get("/users", verifyToken, async (req, res) => {
-            // console.log('Inside verify token', req.headers);
+            console.log('Inside verify token', req.headers);
             const result = await userCollection.find().toArray();
             res.send(result);
         });
