@@ -28,7 +28,7 @@ app.use("/payments", paymentRoutes);
 app.use("/admin", adminRoutes);
 
 app.get("/", (req, res) => {
-  res.send("Bistro World!");
+  res.send("FoodCode World!");
 });
 
 app.listen(port, () => {
