@@ -21,10 +21,8 @@ const getAdminStats = async (req, res) => {
       },
     ])
     .toArray();
-  console.log(result)
 
   const revenueResult = result.length > 0 ? result[0].totalRevenue : 0;
-  console.log(revenueResult)
   const revenue = parseFloat(revenueResult.toFixed(2));
 
   res.send({ users, menuItems, orders, revenue });
