@@ -9,7 +9,6 @@ const getUsers = async (req, res) => {
 };
 
 const getUserAdminStatus = async (req, res) => {
-  //insert email if user doesn't exist
   const email = req.params.email;
   if (email !== req.decoded.email) {
     return res.status(403).send({ message: "Forbidden access" });
@@ -25,6 +24,7 @@ const getUserAdminStatus = async (req, res) => {
 
 const createUser = async (req, res) => {
   const user = req.body;
+  //insert email if user doesn't exist
   const query = { email: user.email };
   const existingUser = await userCollection.findOne(query);
   if (existingUser) {
