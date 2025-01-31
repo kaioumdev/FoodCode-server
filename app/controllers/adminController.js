@@ -42,6 +42,16 @@ const getOrderStats = async (req, res) => {
           as: "menuItems",
         },
       },
+      {
+        $unwind: "$menuItems",
+      },
+      {
+        $group: {
+          _id: "$menuItems.category",
+          quantity: { $sum: 1 },
+          revenue: { $sum: "$menuItems.price" },
+        },
+      },
     ])
     .toArray();
   res.send(result);
