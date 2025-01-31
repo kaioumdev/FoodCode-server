@@ -12,8 +12,8 @@ const router = express.Router();
 
 router.get("/", getMenu);
 router.get("/:id", getMenuItem);
-router.post("/", verifyToken, verifyAdmin, createMenuItem);
-router.patch("/:id", verifyToken, verifyAdmin, updateMenuItem);
-router.delete("/:id", verifyToken, verifyAdmin, deleteMenuItem);
+router.post("/", verifyToken, createMenuItem);
+router.patch("/:id", verifyToken, updateMenuItem);
+router.delete("/:id", verifyToken, deleteMenuItem);
 
 module.exports = router;
