@@ -28,11 +28,16 @@ const getAdminStats = async (req, res) => {
   res.send({ users, menuItems, orders, revenue });
 };
 
-const getOrderStats = async (req, res) => {
+const getOrderStats = async (req, res) =>; {
   const result = await paymentCollection
     .aggregate([
       {
         $unwind: "$menuItemIds",
+      },
+      {
+        $set: {
+          menuItemIds: { $toObjectId: "$menuItemIds" }, // Convert to ObjectId
+        },
       },
       {
         $lookup: {
@@ -52,10 +57,21 @@ const getOrderStats = async (req, res) => {
           revenue: { $sum: "$menuItems.price" },
         },
       },
+      {
+        $project: {
+          _id: 0,
+          category: "$_id",
+          quantity: "$quantity",
+          revenue: { $round: ["$revenue", 2] }, // Round revenue to 2 decimal places
+        },
+      },
     ])
     .toArray();
+
   res.send(result);
 };
+
+
 
 module.exports = {
   getAdminStats,
