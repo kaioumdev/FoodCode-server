@@ -28,7 +28,7 @@ const getAdminStats = async (req, res) => {
   res.send({ users, menuItems, orders, revenue });
 };
 
-const getOrderStats = async (req, res) =>; {
+const getOrderStats = async (req, res) => {
   const result = await paymentCollection
     .aggregate([
       {
