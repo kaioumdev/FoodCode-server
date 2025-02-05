@@ -27,18 +27,44 @@ const getUserAdminStatus = async (req, res) => {
   }
 };
 
+// const createUser = async (req, res) => {
+//   const user = req.body;
+//   //insert email if user doesn't exist
+//   const query = { email: user.email };
+//   const existingUser = await userCollection.findOne(query);
+//   if (existingUser) {
+//     res.send("User already exists");
+//     return;
+//   }
+//   const result = await userCollection.insertOne(user);
+//   res.send(result);
+// };
+
 const createUser = async (req, res) => {
-  const user = req.body;
-  //insert email if user doesn't exist
-  const query = { email: user.email };
-  const existingUser = await userCollection.findOne(query);
-  if (existingUser) {
-    res.send("User already exists");
-    return;
+  try {
+    const user = req.body;
+    // Check if user already exists
+    const query = { email: user.email };
+    const existingUser = await userCollection.findOne(query);
+
+    if (existingUser) {
+      return res.status(400).send("User already exists");
+    }
+
+    // Assign default role if not provided
+    const newUser = {
+      ...user,
+      role: user?.role || "user", // Set default role to "user" if not provided
+    };
+
+    // Insert new user
+    const result = await userCollection.insertOne(newUser);
+    res.status(201).send(result);
+  } catch (error) {
+    res.status(500).send({ message: "Error creating user", error });
   }
-  const result = await userCollection.insertOne(user);
-  res.send(result);
 };
+
 
 const makeAdmin = async (req, res) => {
   try {
