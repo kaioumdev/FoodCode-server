@@ -9,17 +9,22 @@ const getUsers = async (req, res) => {
 };
 
 const getUserAdminStatus = async (req, res) => {
-  const email = req.params.email;
-  if (email !== req.decoded.email) {
-    return res.status(403).send({ message: "Forbidden access" });
+  try {
+    const email = req.params.email;
+    if (email !== req.decoded.email) {
+      return res.status(403).send({ message: "Forbidden access" });
+    }
+    const query = { email: email };
+    const user = await userCollection.findOne(query);
+    let admin = false;
+    if (user) {
+      admin = user?.role === "admin";
+    }
+    res.send({ admin: admin });
+  } catch (error) {
+    console.error("Error fetching admin status:", error);
+    res.status(500).send({ message: "An Admin Status occurred" });
   }
-  const query = { email: email };
-  const user = await userCollection.findOne(query);
-  let admin = false;
-  if (user) {
-    admin = user?.role === "admin";
-  }
-  res.send({ admin: admin });
 };
 
 const createUser = async (req, res) => {
