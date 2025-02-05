@@ -53,22 +53,52 @@ const createUser = async (req, res) => {
 };
 
 
+// const makeAdmin = async (req, res) => {
+//   try {
+//     const id = req.params.id;
+//     const filter = { _id: new ObjectId(id) };
+//     const updatedDoc = {
+//       $set: {
+//         role: "admin",
+//       },
+//     };
+//     const result = await userCollection.updateOne(filter, updatedDoc);
+//     res.send(result);
+//   } catch (error) {
+//     console.error("Error updating user role:", error);
+//     res.status(500).send({ message: "An error occurred" });
+//   }
+// };
+
 const makeAdmin = async (req, res) => {
   try {
     const id = req.params.id;
     const filter = { _id: new ObjectId(id) };
+
+    // Get current user role
+    const user = await userCollection.findOne(filter);
+    if (!user) {
+      return res.status(404).send({ message: "User not found" });
+    }
+
+    // Toggle role between "admin" and "user"
+    const newRole = user.role === "admin" ? "user" : "admin";
+
     const updatedDoc = {
       $set: {
-        role: "admin",
+        role: newRole,
       },
     };
+
     const result = await userCollection.updateOne(filter, updatedDoc);
-    res.send(result);
+
+    res.send({ modifiedCount: result.modifiedCount, newRole });
   } catch (error) {
     console.error("Error updating user role:", error);
     res.status(500).send({ message: "An error occurred" });
   }
 };
+
 
 const deleteUser = async (req, res) => {
   const id = req.params.id;
