@@ -28,7 +28,7 @@ app.use("/payments", paymentRoutes);
 app.use("/admin", adminRoutes);
 
 app.get("/", (req, res) => {
-  res.send("FoodCode World!");
+  res.send("Connect to the FoodCode Application Successfully!");
 });
 
 app.listen(port, () => {
