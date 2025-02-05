@@ -27,19 +27,6 @@ const getUserAdminStatus = async (req, res) => {
   }
 };
 
-// const createUser = async (req, res) => {
-//   const user = req.body;
-//   //insert email if user doesn't exist
-//   const query = { email: user.email };
-//   const existingUser = await userCollection.findOne(query);
-//   if (existingUser) {
-//     res.send("User already exists");
-//     return;
-//   }
-//   const result = await userCollection.insertOne(user);
-//   res.send(result);
-// };
-
 const createUser = async (req, res) => {
   try {
     const user = req.body;
