@@ -4,10 +4,15 @@ const { ObjectId } = require("mongodb");
 const cartCollection = client.db("bistroDB").collection("carts");
 
 const getCarts = async (req, res) => {
-  const email = req.query.email;
-  const query = { email: email };
-  const result = await cartCollection.find(query).toArray();
-  res.send(result);
+  try {
+    const email = req.query.email;
+    const query = { email: email };
+    const result = await cartCollection.find(query).toArray();
+    res.send(result);
+  } catch (error) {
+    console.error("Can not get carts:", error);
+    res.status(500).send({ message: "Can not get carts" });
+  }
 };
 
 const createCartItem = async (req, res) => {
