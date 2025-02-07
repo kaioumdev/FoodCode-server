@@ -16,9 +16,14 @@ const getCarts = async (req, res) => {
 };
 
 const createCartItem = async (req, res) => {
-  const cartItem = req.body;
-  const result = await cartCollection.insertOne(cartItem);
-  res.send(result);
+  try {
+    const cartItem = req.body;
+    const result = await cartCollection.insertOne(cartItem);
+    res.send(result);
+  } catch (error) {
+    console.error("Can not create cart item:", error);
+    res.status(500).send({ message: "Can not create cart item" });
+  }
 };
 
 const deleteCartItem = async (req, res) => {
