@@ -63,10 +63,15 @@ const updateMenuItem = async (req, res) => {
 };
 
 const deleteMenuItem = async (req, res) => {
-  const id = req.params.id;
-  const query = { _id: new ObjectId(id) };
-  const result = await menuCollection.deleteOne(query);
-  res.send(result);
+  try {
+    const id = req.params.id;
+    const query = { _id: new ObjectId(id) };
+    const result = await menuCollection.deleteOne(query);
+    res.send(result);
+  } catch (error) {
+    console.error("Can not delete menu item:", error);
+    res.status(500).send({ message: "Can not delete menu item" });
+  }
 };
 
 module.exports = {
