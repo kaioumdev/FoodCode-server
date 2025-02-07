@@ -40,20 +40,26 @@ const createMenuItem = async (req, res) => {
 };
 
 const updateMenuItem = async (req, res) => {
-  const item = req.body;
-  const id = req.params.id;
-  const filter = { _id: new ObjectId(id) };
-  const updatedDoc = {
-    $set: {
-      name: item.name,
-      category: item.category,
-      price: item.price,
-      recipe: item.recipe,
-      image: item.image,
-    },
-  };
-  const result = await menuCollection.updateOne(filter, updatedDoc);
-  res.send(result);
+  try {
+    const item = req.body;
+    const id = req.params.id;
+    const filter = { _id: new ObjectId(id) };
+    const updatedDoc = {
+      $set: {
+        name: item.name,
+        category: item.category,
+        price: item.price,
+        recipe: item.recipe,
+        image: item.image,
+      },
+    };
+    const result = await menuCollection.updateOne(filter, updatedDoc);
+    res.send(result);
+  } catch (error) {
+    console.error("Can not update menu item:", error);
+    res.status(500).send({ message: "Can not update menu item" });
+
+  }
 };
 
 const deleteMenuItem = async (req, res) => {
