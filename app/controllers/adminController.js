@@ -5,27 +5,32 @@ const menuCollection = client.db("bistroDB").collection("menu");
 const paymentCollection = client.db("bistroDB").collection("payments");
 
 const getAdminStats = async (req, res) => {
-  const users = await userCollection.estimatedDocumentCount();
-  const menuItems = await menuCollection.estimatedDocumentCount();
-  const orders = await paymentCollection.estimatedDocumentCount();
+  try {
+    const users = await userCollection.estimatedDocumentCount();
+    const menuItems = await menuCollection.estimatedDocumentCount();
+    const orders = await paymentCollection.estimatedDocumentCount();
 
-  const result = await paymentCollection
-    .aggregate([
-      {
-        $group: {
-          _id: null,
-          totalRevenue: {
-            $sum: "$price",
+    const result = await paymentCollection
+      .aggregate([
+        {
+          $group: {
+            _id: null,
+            totalRevenue: {
+              $sum: "$price",
+            },
           },
         },
-      },
-    ])
-    .toArray();
+      ])
+      .toArray();
 
-  const revenueResult = result.length > 0 ? result[0].totalRevenue : 0;
-  const revenue = parseFloat(revenueResult.toFixed(2));
+    const revenueResult = result.length > 0 ? result[0].totalRevenue : 0;
+    const revenue = parseFloat(revenueResult.toFixed(2));
 
-  res.send({ users, menuItems, orders, revenue });
+    res.send({ users, menuItems, orders, revenue });
+  } catch (error) {
+    console.error("Can not get admin stats:", error);
+    res.status(500).send({ message: "Can not get admin stats" });
+  }
 };
 
 const getOrderStats = async (req, res) => {
