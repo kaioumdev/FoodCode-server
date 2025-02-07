@@ -1,6 +1,10 @@
 const { client } = require("../config/db");
 const { ObjectId } = require("mongodb");
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
+const { Resend } = require("resend");
+
+// const app = express();
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 const paymentCollection = client.db("bistroDB").collection("payments");
 const cartCollection = client.db("bistroDB").collection("carts");
@@ -50,7 +54,23 @@ const createPayment = async (req, res) => {
       },
     };
     const deleteResult = await cartCollection.deleteMany(query);
-
+    await resend.emails.send({
+      from: "Acme <onboarding@resend.dev>",
+      to: ["abdulkaiyumfahim.social@gmail.com"],
+      subject: "Receipt for your payment",
+      html: `<div>
+          <h1>Thanks for the payment</h1>
+           <h1>Thank you for your order!</h1>
+           <h4>Your transactionId: <strong>${payment.transactionId}</strong></h4>
+         <p>We would like to get your feedback about our foods</p>
+           </div>`,
+      attachments: [
+        {
+          path: "https://resend.com/static/sample/invoice.pdf",
+          filename: "invoice.pdf",
+        },
+      ],
+    });
     res.send({ paymentResult, deleteResult });
   } catch (error) {
     console.error("Can not create payment:", error);
