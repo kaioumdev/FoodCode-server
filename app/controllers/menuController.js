@@ -28,9 +28,15 @@ const getMenuItem = async (req, res) => {
 };
 
 const createMenuItem = async (req, res) => {
-  const menuItem = req.body;
-  const result = await menuCollection.insertOne(menuItem);
-  res.send(result);
+  try {
+    const menuItem = req.body;
+    const result = await menuCollection.insertOne(menuItem);
+    res.send(result);
+  } catch (error) {
+    console.error("Can not create menu item:", error);
+    res.status(500).send({ message: "Can not create menu item" });
+
+  }
 };
 
 const updateMenuItem = async (req, res) => {
