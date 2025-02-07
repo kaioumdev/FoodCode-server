@@ -15,10 +15,16 @@ const getMenu = async (req, res) => {
 };
 
 const getMenuItem = async (req, res) => {
-  const id = req.params.id;
-  const query = { _id: new ObjectId(id) };
-  const result = await menuCollection.findOne(query);
-  res.send(result);
+  try {
+    const id = req.params.id;
+    const query = { _id: new ObjectId(id) };
+    const result = await menuCollection.findOne(query);
+    res.send(result);
+  } catch (error) {
+    console.error("Can not get menu item:", error);
+    res.status(500).send({ message: "Can not get menu item" });
+
+  }
 };
 
 const createMenuItem = async (req, res) => {
