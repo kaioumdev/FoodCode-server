@@ -27,10 +27,15 @@ const createCartItem = async (req, res) => {
 };
 
 const deleteCartItem = async (req, res) => {
-  const id = req.params.id;
-  const query = { _id: new ObjectId(id) };
-  const result = await cartCollection.deleteOne(query);
-  res.send(result);
+  try {
+    const id = req.params.id;
+    const query = { _id: new ObjectId(id) };
+    const result = await cartCollection.deleteOne(query);
+    res.send(result);
+  } catch (error) {
+    console.error("Can not delete cart item:", error);
+    res.status(500).send({ message: "Can not delete cart item" });
+  }
 };
 
 module.exports = {
