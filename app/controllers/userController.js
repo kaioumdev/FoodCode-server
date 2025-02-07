@@ -58,24 +58,6 @@ const createUser = async (req, res) => {
   }
 };
 
-
-// const makeAdmin = async (req, res) => {
-//   try {
-//     const id = req.params.id;
-//     const filter = { _id: new ObjectId(id) };
-//     const updatedDoc = {
-//       $set: {
-//         role: "admin",
-//       },
-//     };
-//     const result = await userCollection.updateOne(filter, updatedDoc);
-//     res.send(result);
-//   } catch (error) {
-//     console.error("Error updating user role:", error);
-//     res.status(500).send({ message: "An error occurred" });
-//   }
-// };
-
 const makeAdmin = async (req, res) => {
   try {
     const id = req.params.id;
