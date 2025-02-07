@@ -25,13 +25,18 @@ const createPaymentIntent = async (req, res) => {
 };
 
 const getPayments = async (req, res) => {
-  const email = req.params.email;
-  const query = { email: email };
-  if (req.params.email !== req.decoded.email) {
-    return res.status(403).send({ message: "Forbidden access" });
+  try {
+    const email = req.params.email;
+    const query = { email: email };
+    if (req.params.email !== req.decoded.email) {
+      return res.status(403).send({ message: "Forbidden access" });
+    }
+    const result = await paymentCollection.find(query).toArray();
+    res.send(result);
+  } catch (error) {
+    console.error("Can not get payments:", error);
+    res.status(500).send({ message: "Can not get payments" });
   }
-  const result = await paymentCollection.find(query).toArray();
-  res.send(result);
 };
 
 const createPayment = async (req, res) => {
