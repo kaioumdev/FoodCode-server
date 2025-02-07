@@ -34,46 +34,51 @@ const getAdminStats = async (req, res) => {
 };
 
 const getOrderStats = async (req, res) => {
-  const result = await paymentCollection
-    .aggregate([
-      {
-        $unwind: "$menuItemIds",
-      },
-      {
-        $set: {
-          menuItemIds: { $toObjectId: "$menuItemIds" }, // Convert to ObjectId
+  try {
+    const result = await paymentCollection
+      .aggregate([
+        {
+          $unwind: "$menuItemIds",
         },
-      },
-      {
-        $lookup: {
-          from: "menu",
-          localField: "menuItemIds",
-          foreignField: "_id",
-          as: "menuItems",
+        {
+          $set: {
+            menuItemIds: { $toObjectId: "$menuItemIds" }, // Convert to ObjectId
+          },
         },
-      },
-      {
-        $unwind: "$menuItems",
-      },
-      {
-        $group: {
-          _id: "$menuItems.category",
-          quantity: { $sum: 1 },
-          revenue: { $sum: "$menuItems.price" },
+        {
+          $lookup: {
+            from: "menu",
+            localField: "menuItemIds",
+            foreignField: "_id",
+            as: "menuItems",
+          },
         },
-      },
-      {
-        $project: {
-          _id: 0,
-          category: "$_id",
-          quantity: "$quantity",
-          revenue: { $round: ["$revenue", 2] }, // Round revenue to 2 decimal places
+        {
+          $unwind: "$menuItems",
         },
-      },
-    ])
-    .toArray();
+        {
+          $group: {
+            _id: "$menuItems.category",
+            quantity: { $sum: 1 },
+            revenue: { $sum: "$menuItems.price" },
+          },
+        },
+        {
+          $project: {
+            _id: 0,
+            category: "$_id",
+            quantity: "$quantity",
+            revenue: { $round: ["$revenue", 2] }, // Round revenue to 2 decimal places
+          },
+        },
+      ])
+      .toArray();
 
-  res.send(result);
+    res.send(result);
+  } catch (error) {
+    console.error("Can not get order stats:", error);
+    res.status(500).send({ message: "Can not get order stats" });
+  }
 };
 
 
