@@ -50,6 +50,7 @@ const createPayment = async (req, res) => {
       },
     };
     const deleteResult = await cartCollection.deleteMany(query);
+
     res.send({ paymentResult, deleteResult });
   } catch (error) {
     console.error("Can not create payment:", error);
