@@ -4,8 +4,14 @@ const { ObjectId } = require("mongodb");
 const menuCollection = client.db("bistroDB").collection("menu");
 
 const getMenu = async (req, res) => {
-  const result = await menuCollection.find().toArray();
-  res.send(result);
+  try {
+    const result = await menuCollection.find().toArray();
+    res.send(result);
+  } catch (error) {
+    console.error("Can not get menu:", error);
+    res.status(500).send({ message: "Can not get menu" });
+
+  }
 };
 
 const getMenuItem = async (req, res) => {
