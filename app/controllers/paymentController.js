@@ -6,17 +6,22 @@ const paymentCollection = client.db("bistroDB").collection("payments");
 const cartCollection = client.db("bistroDB").collection("carts");
 
 const createPaymentIntent = async (req, res) => {
-  const { price } = req.body;
-  const amount = parseInt(price * 100);
-  const paymentIntent = await stripe.paymentIntents.create({
-    amount: amount,
-    currency: "usd",
-    payment_method_types: ["card"],
-  });
+  try {
+    const { price } = req.body;
+    const amount = parseInt(price * 100);
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: amount,
+      currency: "usd",
+      payment_method_types: ["card"],
+    });
 
-  res.send({
-    clientSecret: paymentIntent.client_secret,
-  });
+    res.send({
+      clientSecret: paymentIntent.client_secret,
+    });
+  } catch (error) {
+    console.error("Can not create createPaymentIntent:", error);
+    res.status(500).send({ message: "Can not create createPaymentIntent" });
+  }
 };
 
 const getPayments = async (req, res) => {
