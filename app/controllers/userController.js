@@ -4,8 +4,13 @@ const { ObjectId } = require("mongodb");
 const userCollection = client.db("bistroDB").collection("users");
 
 const getUsers = async (req, res) => {
-  const result = await userCollection.find().toArray();
-  res.send(result);
+  try {
+    const result = await userCollection.find().toArray();
+    res.send(result);
+  } catch (error) {
+    console.error("Can not get users info:", error);
+    res.status(500).send({ message: "Can not get users info" });
+  }
 };
 
 const getUserAdminStatus = async (req, res) => {
