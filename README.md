@@ -29,8 +29,8 @@ FoodCode is a full-stack application designed for managing a restaurant's menu, 
 ### Steps
 1. Clone the repository:
    ```sh
-   git clone <repository-url>
-   cd foodcode-app
+   git clone https://github.com/kaiyumdev/FoodCode-server
+   cd FoodCode-server
    ```
 2. Install dependencies:
    ```sh
