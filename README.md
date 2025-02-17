@@ -3,6 +3,12 @@
 ## Overview
 FoodCode is a full-stack application designed for managing a restaurant's menu, user authentication, cart, payments, and admin functionalities. It is built using Node.js, Express.js, MongoDB, and JWT authentication. The application ensures secure transactions and a seamless user experience.
 
+## Deploying Live
+
+To deploy your backend server live, you can use platforms like Vercel, Heroku, AWS, Google Cloud, or Digital Ocean.
+
+**Vercel Live Link:** [Live](https://food-code-server.vercel.app/).
+
 ## Features
 - **User Authentication**: Users can register, log in, and receive JWT tokens for secure authentication.
 - **Admin Role Management**: Admins can promote users, manage the menu, and view order statistics.
