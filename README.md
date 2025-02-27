@@ -35,7 +35,7 @@ To deploy your backend server live, you can use platforms like Vercel, Heroku, A
 ### Steps
 1. Clone the repository:
    ```sh
-   git clone https://github.com/kaiyumdev/FoodCode-server
+   git clone https://github.com/kaioumdev/FoodCode-server
    cd FoodCode-server
    ```
 2. Install dependencies:
