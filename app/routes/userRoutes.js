@@ -1,5 +1,4 @@
 const express = require("express");
-const cors = require("cors");
 const {
   getUsers,
   getUserAdminStatus,
@@ -14,7 +13,6 @@ const router = express.Router();
 router.get("/", verifyToken, getUsers);
 router.get("/admin/:email", verifyToken, getUserAdminStatus);
 router.post("/", createUser);
-router.options('/admin/:id', cors(corsOptions));
 router.patch("/admin/:id", verifyToken, makeAdmin);
 router.delete("/:id", verifyToken, deleteUser);
 
