@@ -20,8 +20,7 @@ app.options('*', cors({
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
   credentials: true
 }));
-
-
+app.use(express.json());
 connectDB();
 
 app.use("/auth", authRoutes);
