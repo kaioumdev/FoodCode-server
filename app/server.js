@@ -15,11 +15,13 @@ const app = express();
 const port = process.env.PORT || 5001;
 
 // app.use(cors());
-app.use(app.options('*', cors({
+const corsOptions = {
   origin: 'https://food-code-client.vercel.app',
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
   credentials: true
-})));
+};
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions)); // ✅ Handle Preflight Requests
 app.use(express.json());
 connectDB();
 
