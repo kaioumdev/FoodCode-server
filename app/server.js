@@ -65,7 +65,7 @@ const corsOptions = {
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
   preflightContinue: false,
-  optionsSuccessStatus: 204
+  // optionsSuccessStatus: 204
 };
 
 // ✅ Use CORS with options
