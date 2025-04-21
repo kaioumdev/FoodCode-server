@@ -59,18 +59,30 @@ const app = express();
 const port = process.env.PORT || 5001;
 
 // ✅ Define CORS options
-const corsOptions = {
-  origin: 'https://food-code-client.vercel.app',
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true,
-  preflightContinue: false,
-  // optionsSuccessStatus: 204
-};
+// const corsOptions = {
+//   origin: 'https://food-code-client.vercel.app',
+//   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+//   allowedHeaders: ['Content-Type', 'Authorization'],
+//   credentials: true,
+//   preflightContinue: false,
+//   // optionsSuccessStatus: 204
+// };
 
-// ✅ CORS must come before all other middlewares
-app.use(cors(corsOptions));
-app.options('*', cors(corsOptions));
+// // ✅ CORS must come before all other middlewares
+// app.use(cors(corsOptions));
+// app.options('*', cors(corsOptions));
+
+app.use(cors({
+  origin: 'https://your-frontend.vercel.app', // Or '*', for development
+  credentials: true // If you're using cookies or tokens
+}));
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "https://your-frontend.vercel.app");
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  next();
+});
+
 
 // ✅ Body parser middleware
 app.use(express.json());
