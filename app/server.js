@@ -68,10 +68,8 @@ const corsOptions = {
   // optionsSuccessStatus: 204
 };
 
-// ✅ Use CORS with options
+// ✅ CORS must come before all other middlewares
 app.use(cors(corsOptions));
-
-// ✅ Handle preflight OPTIONS for all routes
 app.options('*', cors(corsOptions));
 
 // ✅ Body parser middleware
