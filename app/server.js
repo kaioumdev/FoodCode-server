@@ -18,7 +18,8 @@ const port = process.env.PORT || 5001;
 const corsOptions = {
   origin: 'https://food-code-client.vercel.app',
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
-  credentials: true
+  credentials: true,
+  allowedHeaders: ['Content-Type', 'Authorization']
 };
 app.use(cors(corsOptions));
 app.options('*', cors(corsOptions)); // ✅ Handle Preflight Requests
