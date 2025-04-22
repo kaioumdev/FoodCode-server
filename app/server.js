@@ -13,14 +13,19 @@ const app = express();
 const port = process.env.PORT || 5001;
 
 // CORS configuration
-const cors = require("cors");
-
 app.use(cors({
-  origin: "https://food-code-client.vercel.app", // allow your frontend domain
-  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"], // include PATCH here
-  // credentials: true, // if you're using cookies or sessions
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
+// const corsOptions = {
+//   origin: ['https://food-code-client.vercel.app', 'http://localhost:3000'],
+//   methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
+//   // allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+//   credentials: true,
+// };
 
+// // Apply CORS as early as possible in the middleware chain
+// app.use(cors(corsOptions));
 
 // Express middleware
 app.use(express.json());
