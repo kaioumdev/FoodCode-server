@@ -9,42 +9,34 @@ const reviewRoutes = require("./routes/reviewRoutes");
 const cartRoutes = require("./routes/cartRoutes");
 const paymentRoutes = require("./routes/paymentRoutes");
 const adminRoutes = require("./routes/adminRoutes");
+
 const app = express();
 const port = process.env.PORT || 5001;
 
-// CORS configuration
+// ✅ CORS configuration (Fixes PATCH + preflight issues)
 app.use(cors({
   origin: "https://food-code-client.vercel.app", // frontend domain
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
-  credentials: true,
+  credentials: true
 }));
-app.options("*", cors()); // Pre-flight request for all routes
-// const corsOptions = {
-//   origin: ['https://food-code-client.vercel.app', 'http://localhost:3000'],
-//   methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
-//   // allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
-//   credentials: true,
-// };
 
-// // Apply CORS as early as possible in the middleware chain
-// app.use(cors(corsOptions));
-
-// Express middleware
+// ✅ Express middleware
 app.use(express.json());
 
-// app.options('*', (req, res) => {
-//   res.setHeader("Access-Control-Allow-Origin", "https://food-code-client.vercel.app");
-//   res.setHeader("Access-Control-Allow-Methods", "GET, POST, PATCH, PUT, DELETE, OPTIONS");
-//   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-//   res.setHeader("Access-Control-Allow-Credentials", "true");
-//   return res.sendStatus(204);
-// });
+// ✅ Handle all OPTIONS preflight requests (Important for PATCH/DELETE)
+app.options("*", (req, res) => {
+  res.header("Access-Control-Allow-Origin", "https://food-code-client.vercel.app");
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, OPTIONS");
+  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.header("Access-Control-Allow-Credentials", "true");
+  res.sendStatus(204);
+});
 
-// Connect to database
+// ✅ Connect to database
 connectDB();
 
-// Apply routes
+// ✅ Routes
 app.use("/auth", authRoutes);
 app.use("/users", userRoutes);
 app.use("/menu", menuRoutes);
@@ -53,11 +45,12 @@ app.use("/carts", cartRoutes);
 app.use("/payments", paymentRoutes);
 app.use("/admin", adminRoutes);
 
+// ✅ Root endpoint
 app.get("/", (req, res) => {
   res.send("Connect to the FoodCode Application Successfully!");
 });
 
-// Start server
+// ✅ Start server
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
