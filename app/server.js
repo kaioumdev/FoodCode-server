@@ -17,7 +17,7 @@ app.use(cors({
   origin: "https://food-code-client.vercel.app", // frontend domain
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
   // allowedHeaders: ["Content-Type", "Authorization"],
-  credentials: true,
+  // credentials: true,
 }));
 // const corsOptions = {
 //   origin: ['https://food-code-client.vercel.app', 'http://localhost:3000'],
