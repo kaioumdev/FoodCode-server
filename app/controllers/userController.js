@@ -60,6 +60,7 @@ const createUser = async (req, res) => {
 const makeAdmin = async (req, res) => {
   try {
     const id = req.params.id;
+    console.log("ID:", id);
     const filter = { _id: new ObjectId(id) };
 
     // Get current user role
