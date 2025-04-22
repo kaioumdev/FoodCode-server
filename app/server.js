@@ -14,28 +14,29 @@ const adminRoutes = require("./routes/adminRoutes");
 const app = express();
 const port = process.env.PORT || 5001;
 
-// Define CORS options
+// CORS configuration
 const corsOptions = {
-  origin: "https://food-code-client.vercel.app", // Your frontend domain
-  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"], // Explicitly include PATCH and OPTIONS
-  allowedHeaders: ["Content-Type", "Authorization"],
+  origin: ['https://food-code-client.vercel.app', 'http://localhost:3000'],
+  methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
   credentials: true,
-  optionsSuccessStatus: 204, // Ensure preflight requests return 204
+  preflightContinue: false,
+  optionsSuccessStatus: 204
 };
 
-// Apply CORS middleware
+// Apply CORS as early as possible in the middleware chain
 app.use(cors(corsOptions));
 
-// Handle preflight requests for all routes
-app.options("*", cors(corsOptions));
+// Handle preflight requests
+app.options('*', cors(corsOptions));
 
-// Body parser middleware
+// Express middleware
 app.use(express.json());
 
-// Connect to the database
+// Connect to database
 connectDB();
 
-// Routes
+// Apply routes
 app.use("/auth", authRoutes);
 app.use("/users", userRoutes);
 app.use("/menu", menuRoutes);
