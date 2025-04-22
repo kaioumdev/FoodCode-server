@@ -19,6 +19,7 @@ app.use(cors({
   // allowedHeaders: ["Content-Type", "Authorization"],
   // credentials: true,
 }));
+app.options("*", cors()); // Pre-flight request for all routes
 // const corsOptions = {
 //   origin: ['https://food-code-client.vercel.app', 'http://localhost:3000'],
 //   methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
