@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
 const { connectDB } = require("./config/db");
+
 const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
 const menuRoutes = require("./routes/menuRoutes");
@@ -13,20 +14,35 @@ const adminRoutes = require("./routes/adminRoutes");
 const app = express();
 const port = process.env.PORT || 5001;
 
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', 'https://food-code-client.vercel.app');
-  next();
-});
-
-// ✅ Proper CORS setup
+// ✅ Use CORS middleware properly
 app.use(cors({
-  "origin": "*",
-  "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
-  "preflightContinue": false,
-  "optionsSuccessStatus": 204
+  origin: "https://food-code-client.vercel.app",
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  allowedHeaders: [
+    "Content-Type",
+    "Authorization",
+    "X-CSRF-Token",
+    "X-Requested-With",
+    "Accept",
+    "Accept-Version",
+    "Content-Length",
+    "Content-MD5",
+    "Date",
+    "X-Api-Version"
+  ],
+  credentials: true
 }));
 
-// ✅ Middleware
+// ✅ Handle preflight requests (for PATCH/DELETE/etc)
+app.options("*", (req, res) => {
+  res.setHeader("Access-Control-Allow-Origin", "https://food-code-client.vercel.app");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+  res.sendStatus(204);
+});
+
+// ✅ Body parser middleware
 app.use(express.json());
 
 // ✅ Connect to database

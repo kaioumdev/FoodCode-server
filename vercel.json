@@ -1,16 +1,17 @@
 {
-    "version": 2,
-    "builds": [
-        {
-            "src": "./app/server.js",
-            "use": "@vercel/node"
-        }
-    ],
-    "routes": [
-        {
-            "src": "/(.*)",
-            "dest": "/app/server.js",
-            "methods": ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]
-        }
-    ]
+  "version": 2,
+  "name": "Food-Code-Server",
+  "builds": [{ "src": "./app/server.js", "use": "@vercel/node" }],
+
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "./app/server.js",
+      "methods": ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+      "headers": {
+        "Access-Control-Allow-Origin": "https://food-code-client.vercel.app",
+        "Access-Control-Allow-Credentials": "true"
+      }
+    }
+  ]
 }
