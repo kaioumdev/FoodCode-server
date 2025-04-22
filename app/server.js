@@ -13,25 +13,16 @@ const adminRoutes = require("./routes/adminRoutes");
 const app = express();
 const port = process.env.PORT || 5001;
 
-// ✅ CORS configuration (Fixes PATCH + preflight issues)
+// ✅ Proper CORS setup
 app.use(cors({
-  origin: "https://food-code-client.vercel.app", // frontend domain
+  origin: "https://food-code-client.vercel.app",
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true
 }));
 
-// ✅ Express middleware
+// ✅ Middleware
 app.use(express.json());
-
-// ✅ Handle all OPTIONS preflight requests (Important for PATCH/DELETE)
-app.options("*", (req, res) => {
-  res.header("Access-Control-Allow-Origin", "https://food-code-client.vercel.app");
-  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, OPTIONS");
-  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
-  res.header("Access-Control-Allow-Credentials", "true");
-  res.sendStatus(204);
-});
 
 // ✅ Connect to database
 connectDB();
@@ -45,7 +36,7 @@ app.use("/carts", cartRoutes);
 app.use("/payments", paymentRoutes);
 app.use("/admin", adminRoutes);
 
-// ✅ Root endpoint
+// ✅ Root route
 app.get("/", (req, res) => {
   res.send("Connect to the FoodCode Application Successfully!");
 });
