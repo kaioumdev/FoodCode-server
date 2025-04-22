@@ -1,4 +1,5 @@
 const express = require("express");
+const cors = require('cors')
 const {
   getUsers,
   getUserAdminStatus,
@@ -13,7 +14,8 @@ const router = express.Router();
 router.get("/", verifyToken, getUsers);
 router.get("/admin/:email", verifyToken, getUserAdminStatus);
 router.post("/", createUser);
-router.patch("/admin/:id", verifyToken, makeAdmin);
+router.options('/products/:id', cors())
+router.patch("/admin/:id", cors(), verifyToken, makeAdmin);
 router.delete("/:id", verifyToken, deleteUser);
 
 module.exports = router;
