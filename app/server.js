@@ -32,6 +32,14 @@ app.use(cors({
 // Express middleware
 app.use(express.json());
 
+app.options('*', (req, res) => {
+  res.setHeader("Access-Control-Allow-Origin", "https://food-code-client.vercel.app");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PATCH, PUT, DELETE, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+  return res.sendStatus(204);
+});
+
 // Connect to database
 connectDB();
 
