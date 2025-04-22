@@ -16,7 +16,7 @@ const port = process.env.PORT || 5001;
 const corsOptions = {
   origin: ['https://food-code-client.vercel.app', 'http://localhost:3000'],
   methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+  // allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
   credentials: true,
 };
 
