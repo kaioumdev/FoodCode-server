@@ -13,6 +13,11 @@ const adminRoutes = require("./routes/adminRoutes");
 const app = express();
 const port = process.env.PORT || 5001;
 
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  next();
+});
+
 // ✅ Proper CORS setup
 app.use(cors({
   "origin": "*",
