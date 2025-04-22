@@ -16,8 +16,8 @@ const port = process.env.PORT || 5001;
 app.use(cors({
   origin: "https://food-code-client.vercel.app", // frontend domain
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-  // allowedHeaders: ["Content-Type", "Authorization"],
-  // credentials: true,
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true,
 }));
 app.options("*", cors()); // Pre-flight request for all routes
 // const corsOptions = {
