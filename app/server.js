@@ -18,7 +18,7 @@ const cors = require("cors");
 app.use(cors({
   origin: "https://food-code-client.vercel.app", // allow your frontend domain
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"], // include PATCH here
-  credentials: true, // if you're using cookies or sessions
+  // credentials: true, // if you're using cookies or sessions
 }));
 
 
