@@ -28,7 +28,6 @@ const getAdminStats = async (req, res) => {
 
     res.send({ users, menuItems, orders, revenue });
   } catch (error) {
-    console.error("Can not get admin stats:", error);
     res.status(500).send({ message: "Can not get admin stats" });
   }
 };
