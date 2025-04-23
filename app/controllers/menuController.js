@@ -8,9 +8,7 @@ const getMenu = async (req, res) => {
     const result = await menuCollection.find().toArray();
     res.send(result);
   } catch (error) {
-    console.error("Can not get menu:", error);
     res.status(500).send({ message: "Can not get menu" });
-
   }
 };
 
@@ -21,7 +19,6 @@ const getMenuItem = async (req, res) => {
     const result = await menuCollection.findOne(query);
     res.send(result);
   } catch (error) {
-    console.error("Can not get menu item:", error);
     res.status(500).send({ message: "Can not get menu item" });
 
   }
@@ -33,7 +30,6 @@ const createMenuItem = async (req, res) => {
     const result = await menuCollection.insertOne(menuItem);
     res.send(result);
   } catch (error) {
-    console.error("Can not create menu item:", error);
     res.status(500).send({ message: "Can not create menu item" });
 
   }
@@ -56,7 +52,6 @@ const updateMenuItem = async (req, res) => {
     const result = await menuCollection.updateOne(filter, updatedDoc);
     res.send(result);
   } catch (error) {
-    console.error("Can not update menu item:", error);
     res.status(500).send({ message: "Can not update menu item" });
 
   }
@@ -69,7 +64,6 @@ const deleteMenuItem = async (req, res) => {
     const result = await menuCollection.deleteOne(query);
     res.send(result);
   } catch (error) {
-    console.error("Can not delete menu item:", error);
     res.status(500).send({ message: "Can not delete menu item" });
   }
 };
