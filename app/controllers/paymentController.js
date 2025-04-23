@@ -23,7 +23,6 @@ const createPaymentIntent = async (req, res) => {
       clientSecret: paymentIntent.client_secret,
     });
   } catch (error) {
-    console.error("Can not create createPaymentIntent:", error);
     res.status(500).send({ message: "Can not create createPaymentIntent" });
   }
 };
@@ -38,7 +37,6 @@ const getPayments = async (req, res) => {
     const result = await paymentCollection.find(query).toArray();
     res.send(result);
   } catch (error) {
-    console.error("Can not get payments:", error);
     res.status(500).send({ message: "Can not get payments" });
   }
 };
@@ -73,7 +71,6 @@ const createPayment = async (req, res) => {
     });
     res.send({ paymentResult, deleteResult });
   } catch (error) {
-    console.error("Can not create payment:", error);
     res.status(500).send({ message: "Can not create payment" });
   }
 };
