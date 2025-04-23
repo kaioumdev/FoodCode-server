@@ -8,7 +8,6 @@ const getUsers = async (req, res) => {
     const result = await userCollection.find().toArray();
     res.send(result);
   } catch (error) {
-    console.error("Can not get users info:", error);
     res.status(500).send({ message: "Can not get users info" });
   }
 };
@@ -27,7 +26,6 @@ const getUserAdminStatus = async (req, res) => {
     // }
     res.send(user);
   } catch (error) {
-    console.error("Error fetching admin status:", error);
     res.status(500).send({ message: "An Admin Status occurred" });
   }
 };
@@ -81,7 +79,6 @@ const makeAdmin = async (req, res) => {
 
     res.send({ modifiedCount: result.modifiedCount, newRole });
   } catch (error) {
-    console.error("Error updating user role:", error);
     res.status(500).send({ message: "An error occurred" });
   }
 };
@@ -94,7 +91,6 @@ const deleteUser = async (req, res) => {
     const result = await userCollection.deleteOne(query);
     res.send(result);
   } catch (error) {
-    console.error("Failed to delete user:", error);
     res.status(500).send({ message: "Failed to delete user" });
   }
 };
