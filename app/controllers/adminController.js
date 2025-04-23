@@ -75,7 +75,6 @@ const getOrderStats = async (req, res) => {
 
     res.send(result);
   } catch (error) {
-    console.error("Can not get order stats:", error);
     res.status(500).send({ message: "Can not get order stats" });
   }
 };
