@@ -10,7 +10,6 @@ const getCarts = async (req, res) => {
     const result = await cartCollection.find(query).toArray();
     res.send(result);
   } catch (error) {
-    console.error("Can not get carts:", error);
     res.status(500).send({ message: "Can not get carts" });
   }
 };
@@ -21,7 +20,6 @@ const createCartItem = async (req, res) => {
     const result = await cartCollection.insertOne(cartItem);
     res.send(result);
   } catch (error) {
-    console.error("Can not create cart item:", error);
     res.status(500).send({ message: "Can not create cart item" });
   }
 };
@@ -33,7 +31,6 @@ const deleteCartItem = async (req, res) => {
     const result = await cartCollection.deleteOne(query);
     res.send(result);
   } catch (error) {
-    console.error("Can not delete cart item:", error);
     res.status(500).send({ message: "Can not delete cart item" });
   }
 };
