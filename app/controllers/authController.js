@@ -9,7 +9,6 @@ const createJWT = (req, res) => {
     });
     res.send({ token });
   } catch (error) {
-    console.error("Failed to create jwtToken:", error);
     res.status(500).send({ message: "Failed to create jwtToken" });
   }
 };
